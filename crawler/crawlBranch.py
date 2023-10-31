@@ -1,7 +1,7 @@
 import yaml
 import requests
 from bs4 import BeautifulSoup
-import re
+import pandas as pd
 import os
 import time
 
@@ -37,14 +37,41 @@ def parseBranchList(BranchList):
     BranchData = []
     defaultUrl = 'https://www.gsmarena.com/'
     for branch in BranchList:
+        # parse branch data
         BranchUrl = defaultUrl+branch.find('a')['href']
-        # BranchName = branch.find('a').text
-        # Branch name and number of phone is separated by <br/>
-        BranchName = branch.find('a').text.split('\n')[0]
-        
-        BranchData.append([BranchUrl, BranchName])
+        BranchName, NumberOfPhone = str(branch.find('a')).split("<br/>")
+        BranchName = BranchName.split(">")[1]
+        NumberOfPhone = int(NumberOfPhone.split(">")[1].split(" ")[0])
+
+        BranchData.append([BranchName, NumberOfPhone, BranchUrl])
 
     return BranchData
+
+# 4. Save the branch data
+def saveBranchData(BranchData, path, filename):
+    # save the branch data to csv
+    df = pd.DataFrame(BranchData, columns=['BranchName', 'NumberOfPhone', 'BranchUrl'])
+    df.to_csv(os.path.join(path, filename + ".csv"), index=False)
+
+# 5. Main function
+def crawlBranchData(config):
+    startTime = time.time()
+
+    soup = getBranchPage(config['BranchPageUrl'])
+    BranchList = getBranchList(soup)
+    BranchData = parseBranchList(BranchList)
+    saveBranchData(BranchData, config['Path'], config['Filename'])
+
+    endTime = time.time()
+    enlapsedTime = endTime - startTime
+
+# Util function
+def convertTime(enlapsedTime):
+    hours, rem = divmod(enlapsedTime, 3600)
+    minutes, seconds = divmod(rem, 60)
+    return "{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds)
+    
+    
 
 
 
@@ -52,11 +79,5 @@ if __name__ == '__main__':
     with open('crawler\config.yaml', 'r') as f:
         config = yaml.safe_load(f)
 
-    soup = getBranchPage(config['BranchPageUrl'])
-    # print(soup)
-    BranchList = getBranchList(soup)
-    # print(BranchList)
-    BranchData = parseBranchList(BranchList)
-    for branch in BranchData:
-        print(branch)
+    crawlBranchData(config['BranchData'])
     
