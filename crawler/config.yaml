@@ -2,6 +2,7 @@ BrandsPageUrl: https://www.gsmarena.com/makers.php3
 SavePath: data
 BrandsListFileName: Brands_data
 AllDevicesUrlsFileName: Devices_url
+DevicesSpecsFileName: Devices_Specs
 DRIVER_WAIT_TIME: 10
 TIME_LOAD_PAGE: 6
 TIME_CLICK: 2
