@@ -87,7 +87,7 @@ def goNextPage(driver, config):
         print("Wait Timed out")
         # print(e)
     except NoSuchElementException as ne:
-        print("No such element")
+        print("Only one page")
         # print(ne)
         return False
 
