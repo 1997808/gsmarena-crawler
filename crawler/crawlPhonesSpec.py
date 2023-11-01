@@ -410,7 +410,7 @@ def parseDeviceData(soup) -> list:
 
 # Main function
 # get all phone specs
-def crawlAllPhoneSpecs(config, start = 0, end = -1):
+def crawlAllPhoneSpecs(config, start=0, end=-1):
     # load all device url
     DeviceUrls = pd.read_csv(os.path.join(
         config['SavePath'], config['AllDevicesUrlsFileName'] + ".csv"))
@@ -429,7 +429,7 @@ def crawlAllPhoneSpecs(config, start = 0, end = -1):
         if (i+1) % 100 == 0:
             print(i+1, "devices crawled")
 
-    print("Total devices crawled:", len(DeviceUrls))
+    print("Total devices crawled:", len(phoneSpecs))
     print("Total time:", convertTime(time.time() - startTime))
 
     savePhoneSpecs(config, phoneSpecs)
