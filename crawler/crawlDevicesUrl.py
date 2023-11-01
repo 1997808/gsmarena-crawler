@@ -171,7 +171,7 @@ def crawlAllDeviceUrlOfAllBrand(config, Brands_data):
 def crawlDevicesUrl(config):
     # load the brand data from csv
     Brands_data = loadBrandsData(
-        config['BrandsDataPath'], config['BrandsDataFileName'])
+        config['SavePath'], config['BrandsListFileName'])
 
     print("Start crawling devices url")
     startTime = time.time()
