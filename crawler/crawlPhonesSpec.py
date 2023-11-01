@@ -423,7 +423,8 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     for i in range(start, len(DeviceUrls) if end == -1 else end):
         url = DeviceUrls['DeviceUrl'][i]
         soup = getPageContent(url)
-        phoneSpecs.append([DeviceUrls['BrandName'][i]] + parseDeviceData(soup))
+        phoneSpecs.append([DeviceUrls['BrandName'][i],
+                          url] + parseDeviceData(soup))
         time.sleep(config['REQUESTS_WAIT_TIME'])
 
         if (i+1) % 100 == 0:
@@ -437,7 +438,7 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
 
 # Util function
 def savePhoneSpecs(config, phoneSpecs):
-    columns = ['Brand', 'imgUrl', 'Name', 'NETWORK_Technology', 'NETWORK_2G_bands', 'NETWORK_3G_bands', 'NETWORK_4G_bands', 'NETWORK_5G_bands', 'NETWORK_GPRS', 'NETWORK_EDGE', 'NETWORK_Speed', 'LAUNCH_Announced', 'LAUNCH_Status', 'BODY_Dimensions', 'BODY_Weight', 'BODY_Build', 'BODY_SIM', 'DISPLAY_Type', 'DISPLAY_Size', 'DISPLAY_Resolution', 'DISPLAY_Protection', 'PLATFORM_OS', 'PLATFORM_Chipset', 'PLATFORM_CPU', 'PLATFORM_GPU', 'MEMORY_Card_slot',
+    columns = ['Brand', 'url', 'imgUrl', 'Name', 'NETWORK_Technology', 'NETWORK_2G_bands', 'NETWORK_3G_bands', 'NETWORK_4G_bands', 'NETWORK_5G_bands', 'NETWORK_GPRS', 'NETWORK_EDGE', 'NETWORK_Speed', 'LAUNCH_Announced', 'LAUNCH_Status', 'BODY_Dimensions', 'BODY_Weight', 'BODY_Build', 'BODY_SIM', 'DISPLAY_Type', 'DISPLAY_Size', 'DISPLAY_Resolution', 'DISPLAY_Protection', 'PLATFORM_OS', 'PLATFORM_Chipset', 'PLATFORM_CPU', 'PLATFORM_GPU', 'MEMORY_Card_slot',
                'MEMORY_Internal', 'MAIN_CAM_1_Module', 'MAIN_CAM_1_Features', 'MAIN_CAM_1_Video', 'SELFIE_CAM_2_Module', 'SELFIE_CAM_2_Features', 'SELFIE_CAM_2_Video', 'SOUND_Loudspeaker', 'SOUND_35mm_jack', 'COMMS_WLAN', 'COMMS_Bluetooth', 'COMMS_GPS', 'COMMS_NFC', 'COMMS_Radio', 'COMMS_USB', 'FEATURES_Sensors', 'BATTERY_Type', 'BATTERY_Stand_by', 'BATTERY_Talk_time', 'BATTERY_Music_play', 'MISC_Colors', 'MISC_SAR', 'MISC_SAR_EU', 'MISC_Models', 'MISC_Price']
     df = pd.DataFrame(phoneSpecs, columns=columns)
     df.to_csv(os.path.join(
