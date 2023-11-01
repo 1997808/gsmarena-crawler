@@ -424,10 +424,10 @@ def crawlAllPhoneSpecs(config):
         url = DeviceUrls['DeviceUrl'][i]
         soup = getPageContent(url)
         phoneSpecs.append(parseDeviceData(soup))
-        time.sleep(0.15)
+        time.sleep(config['REQUESTS_WAIT_TIME'])
 
-        if i % 100 == 0:
-            print(i, "devices crawled")
+        if (i+1) % 100 == 0:
+            print(i+1, "devices crawled")
 
     print("Total devices crawled:", len(DeviceUrls))
     print("Total time:", convertTime(time.time() - startTime))
