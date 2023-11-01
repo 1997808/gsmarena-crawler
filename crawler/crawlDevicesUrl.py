@@ -36,6 +36,7 @@ def createDriver():
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--no-sandbox")
     options.add_argument('--disable-gpu')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     return webdriver.Edge(options=options)
 
@@ -88,6 +89,7 @@ def goNextPage(driver, config):
     except NoSuchElementException as ne:
         print("No such element")
         # print(ne)
+        return False
 
     time.sleep(config["TIME_CLICK"])
 
