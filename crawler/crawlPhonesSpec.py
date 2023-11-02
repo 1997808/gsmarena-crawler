@@ -1,3 +1,4 @@
+import sys
 import yaml
 import pandas as pd
 import os
@@ -58,21 +59,23 @@ from crawlDevicesUrl import createDriver
 #             "Failed to get page content: {}".format(response.status_code))
 
 
-def openURL(driver, url, idRecog, config)->bool:
+def openURL(driver, url, idRecog, config) -> bool:
     wait = WebDriverWait(driver, config["DRIVER_WAIT_TIME"])
-    driver.get(url)
+    try:
+        driver.get(url)
+    except:
+        print("Cannot open url:", url)
+        time.sleep(config['TIME_LOAD_PAGE'])
+        return False
+
     try:
         wait.until(EC.presence_of_element_located(
             (By.ID, idRecog)))
-    except TimeoutException as e:
-        print("Wait Timed out")
-        # print(e)
+    except:
+        print("Cannot load page:", url)
+        time.sleep(config['TIME_LOAD_PAGE'])
         return False
-    except NoSuchElementException as ne:
-        print("No such element")
-        # print(ne)
-        return False
-    
+
     time.sleep(config['TIME_LOAD_PAGE'])
     return True
 
@@ -488,7 +491,7 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     # get all phone specs
     for i in range(start, len(DeviceUrls) if end == -1 else end):
         url = DeviceUrls['DeviceUrl'][i]
-        
+
         # try to open url
         if not openURL(driver, url, "specs-list", config):
             continue
@@ -499,11 +502,13 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
         # parse data
         phoneSpecs.append([DeviceUrls['BrandName'][i],
                           url] + parseDeviceData(soup))
-        
+
         # save data every 500 devices
-        if (i+1) % 500 == 0:
-            print(i+1, "devices crawled")
-            print("Crawl time:", convertTime(time.time() - startTime))
+        if (i+1) % 100 == 0:
+            # print(i+1, "devices crawled")
+            # print("Crawl time:", convertTime(time.time() - startTime))
+            print(''.join(['\r', str(
+                i+1), " devices crawled. Crawl time: ", convertTime(time.time() - startTime)]))
             savePhoneSpecs(config, phoneSpecs)
 
     print("Total devices crawled:", len(phoneSpecs))
