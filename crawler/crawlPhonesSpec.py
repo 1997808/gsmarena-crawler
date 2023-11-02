@@ -1,20 +1,83 @@
 import yaml
 import pandas as pd
 import os
-import requests
+# import requests
+# import random
 from bs4 import BeautifulSoup
 import time
 from crawlBranch import convertTime
 
+# from selenium import webdriver
+# from selenium.webdriver.edge.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+# from selenium.common.exceptions import ElementClickInterceptedException
+from crawlDevicesUrl import createDriver
 
-# get html from url
-def getPageContent(url):
-    r = requests.get(url)
-    return BeautifulSoup(r.text, 'html.parser')
+# # get html from url
+# def getPageContent(url):
+#     r = requests.get(url)
+#     return BeautifulSoup(r.text, 'html.parser')
+
+
+# def getPageContent(url):
+#     # Create a new requests session.
+#     session = requests.Session()
+
+#     # Set a random user agent.
+#     session.headers["User-Agent"] = random.choice([
+#         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36",
+#         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/99.0 Safari/537.36",
+#         "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Mobile/15E148 Safari/604.1",
+#     ])
+
+#     # Add a random delay between requests.
+#     time.sleep(random.uniform(1, 5))
+
+#     # Make the request.
+#     response = session.get(url)
+
+#     # Check for a 429 error (Too Many Requests).
+#     if response.status_code == 429:
+#         # Wait for the number of seconds specified in the "Retry-After" header.
+#         retry_after = int(response.headers["Retry-After"])
+#         time.sleep(retry_after)
+
+#         # Retry the request.
+#         response = session.get(url)
+
+#     # If everything is successful, return the content of the page.
+#     if response.status_code == 200:
+#         # return response.content
+#         return BeautifulSoup(response.text, 'html.parser')
+#     else:
+#         # Raise an exception if the request failed.
+#         raise Exception(
+#             "Failed to get page content: {}".format(response.status_code))
+
+
+def openURL(driver, url, idRecog, config)->bool:
+    wait = WebDriverWait(driver, config["DRIVER_WAIT_TIME"])
+    driver.get(url)
+    try:
+        wait.until(EC.presence_of_element_located(
+            (By.ID, idRecog)))
+    except TimeoutException as e:
+        print("Wait Timed out")
+        # print(e)
+        return False
+    except NoSuchElementException as ne:
+        print("No such element")
+        # print(ne)
+        return False
+    
+    time.sleep(config['TIME_LOAD_PAGE'])
+    return True
+
 
 # parse data from html to get phone specs
-
-
 def parseDeviceData(soup) -> list:
     # get image url
     try:
@@ -419,21 +482,36 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     print("Start crawling phone specs")
     startTime = time.time()
 
+    # create webdriver
+    driver = createDriver()
+
     # get all phone specs
     for i in range(start, len(DeviceUrls) if end == -1 else end):
         url = DeviceUrls['DeviceUrl'][i]
-        soup = getPageContent(url)
+        
+        # try to open url
+        if not openURL(driver, url, "specs-list", config):
+            continue
+
+        # get page source
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        # parse data
         phoneSpecs.append([DeviceUrls['BrandName'][i],
                           url] + parseDeviceData(soup))
-        time.sleep(config['REQUESTS_WAIT_TIME'])
-
-        if (i+1) % 100 == 0:
+        
+        # save data every 500 devices
+        if (i+1) % 500 == 0:
             print(i+1, "devices crawled")
+            print("Crawl time:", convertTime(time.time() - startTime))
+            savePhoneSpecs(config, phoneSpecs)
 
     print("Total devices crawled:", len(phoneSpecs))
     print("Total time:", convertTime(time.time() - startTime))
-
     savePhoneSpecs(config, phoneSpecs)
+
+    # close webdriver
+    driver.close()
 
 
 # Util function

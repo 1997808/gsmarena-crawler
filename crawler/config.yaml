@@ -4,7 +4,7 @@ BrandsListFileName: Brands_data
 AllDevicesUrlsFileName: Devices_url
 DevicesSpecsFileName: Devices_Specs
 DRIVER_WAIT_TIME: 10
-TIME_LOAD_PAGE: 6
+TIME_LOAD_PAGE: 1.5
 TIME_CLICK: 2
 MAX_PAGE: 30
 REQUESTS_WAIT_TIME: 2
