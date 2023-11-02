@@ -491,6 +491,7 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     # get all phone specs
     for i in range(start, len(DeviceUrls) if end == -1 else end):
         url = DeviceUrls['DeviceUrl'][i]
+        print("\rCrawling device", i+1, end="")
 
         # try to open url
         if not openURL(driver, url, "specs-list", config):
@@ -508,7 +509,7 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
             # print(i+1, "devices crawled")
             # print("Crawl time:", convertTime(time.time() - startTime))
             print(''.join(['\r', str(
-                i+1), " devices crawled. Crawl time: ", convertTime(time.time() - startTime)]))
+                i+1-start), " devices crawled. Crawl time: ", convertTime(time.time() - startTime)]))
             savePhoneSpecs(config, phoneSpecs)
 
     print("Total devices crawled:", len(phoneSpecs))
