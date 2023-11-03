@@ -1,0 +1,25 @@
+SavePath: "Final/data/PhoneSpecsBatch/"
+files:
+  [
+    "Devices_Specs_0_1999",
+    "Devices_Specs_2000_2999",
+    "Devices_Specs_3000_4499",
+    "Devices_Specs_4500_5999",
+  ]
+
+conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011 }
+
+regressors:
+  [
+    "LinearRegression",
+    "Ridge",
+    "Lasso",
+    "ElasticNet",
+    "RandomForestRegressor",
+    "SGDRegressor",
+    "DecisionTreeRegressor",
+    "KNeighborsRegressor",
+    "GradientBoostingRegressor",
+    "ExtraTreesRegressor",
+    "XGBRegressor",
+  ]
