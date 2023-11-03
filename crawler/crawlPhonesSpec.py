@@ -491,7 +491,7 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     # get all phone specs
     for i in range(start, len(DeviceUrls) if end == -1 else end):
         url = DeviceUrls['DeviceUrl'][i]
-        print("\rCrawling device", i+1, end="")
+        print("\rCrawling device" + str(i+1), end="")
 
         # try to open url
         if not openURL(driver, url, "specs-list", config):
