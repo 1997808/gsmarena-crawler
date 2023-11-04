@@ -37,3 +37,7 @@ The second step is using selenium to get url of all the phones from each brand p
 ### Step 3: Get the specs of each phone
 
 The third step is to get the specs of each phone from the url we got in the second step
+
+# Note
+
+At step 3, you should use a proxy to avoid being banned by gsmarena.com or divide into multiple batches (recommended each batch has less than 2000 phones) to run the crawler

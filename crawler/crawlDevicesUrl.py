@@ -9,14 +9,26 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 
-from crawlBranch import convertTime
-
 
 # Utility function
 def loadBrandsData(path, filename):
     # load the brand data from csv
     df = pd.read_csv(os.path.join(path, filename + ".csv"))
     return df
+
+
+def convertTime(enlapsedTime):
+    hours, rem = divmod(enlapsedTime, 3600)
+    minutes, seconds = divmod(rem, 60)
+    if hours > 0:
+        if minutes > 0:
+            return "{:0>2} hours {:0>2} minutes {:05.2f} seconds".format(int(hours), int(minutes), seconds)
+        else:
+            return "{:0>2} hours {:05.2f} seconds".format(int(hours), seconds)
+    elif minutes > 0:
+        return "{:0>2} minutes {:05.2f} seconds".format(int(minutes), seconds)
+    else:
+        return "{:05.2f} seconds".format(seconds)
 
 
 def saveAllDeviceUrlOfAllBrand(config, Devices_urls):

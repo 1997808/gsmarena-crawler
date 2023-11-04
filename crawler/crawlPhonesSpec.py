@@ -6,16 +6,16 @@ import os
 # import random
 from bs4 import BeautifulSoup
 import time
-from crawlBranch import convertTime
+# from crawlBranch import convertTime
 
-# from selenium import webdriver
-# from selenium.webdriver.edge.options import Options
+
+from selenium import webdriver
+from selenium.webdriver.edge.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-# from selenium.common.exceptions import ElementClickInterceptedException
-from crawlDevicesUrl import createDriver
+# from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
+
 
 # # get html from url
 # def getPageContent(url):
@@ -57,6 +57,21 @@ from crawlDevicesUrl import createDriver
 #         # Raise an exception if the request failed.
 #         raise Exception(
 #             "Failed to get page content: {}".format(response.status_code))
+
+# Selenium functions
+def createDriver():
+    # create the driver
+    options = Options()
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--mute-audio")
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument("--no-sandbox")
+    options.add_argument('--disable-gpu')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+    return webdriver.Edge(options=options)
 
 
 def openURL(driver, url, idRecog, config) -> bool:
@@ -488,10 +503,21 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     # create webdriver
     driver = createDriver()
 
+    # convert start and end to int
+    try:
+        start = int(start)
+        if end == -1:
+            end = len(DeviceUrls)
+        else:
+            end = int(end)
+    except:
+        print("Invalid start or end")
+        return
+
     # get all phone specs
-    for i in range(start, len(DeviceUrls) if end == -1 else end):
+    for i in range(start, end):
         url = DeviceUrls['DeviceUrl'][i]
-        print("\rCrawling device " + str(i+1), end="")
+        print("\rCrawling device " + str(i+1) + ' ', end="")
 
         # try to open url
         if not openURL(driver, url, "specs-list", config):
@@ -505,28 +531,55 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
                           url] + parseDeviceData(soup))
 
         # save data every 500 devices
-        if (i+1) % 100 == 0:
-            # print(i+1, "devices crawled")
-            # print("Crawl time:", convertTime(time.time() - startTime))
+        if (i+1) % config['SAVE_EVERY'] == 0:
             print(''.join(['\r', str(
                 i+1-start), " devices crawled. Crawl time: ", convertTime(time.time() - startTime)]))
-            savePhoneSpecs(config, phoneSpecs)
 
+            savePhoneSpecs(config, phoneSpecs, temp=True)
+
+    print()
     print("Total devices crawled:", len(phoneSpecs))
     print("Total time:", convertTime(time.time() - startTime))
-    savePhoneSpecs(config, phoneSpecs)
+    savePhoneSpecs(config, phoneSpecs, start, end)
 
     # close webdriver
     driver.close()
 
 
 # Util function
-def savePhoneSpecs(config, phoneSpecs):
+def convertTime(enlapsedTime):
+    hours, rem = divmod(enlapsedTime, 3600)
+    minutes, seconds = divmod(rem, 60)
+    if hours > 0:
+        if minutes > 0:
+            return "{:0>2} hours {:0>2} minutes {:05.2f} seconds".format(int(hours), int(minutes), seconds)
+        else:
+            return "{:0>2} hours {:05.2f} seconds".format(int(hours), seconds)
+    elif minutes > 0:
+        return "{:0>2} minutes {:05.2f} seconds".format(int(minutes), seconds)
+    else:
+        return "{:05.2f} seconds".format(seconds)
+
+
+def savePhoneSpecs(config, phoneSpecs, start=0, end=-1, temp=False):
     columns = ['Brand', 'url', 'imgUrl', 'Name', 'NETWORK_Technology', 'NETWORK_2G_bands', 'NETWORK_3G_bands', 'NETWORK_4G_bands', 'NETWORK_5G_bands', 'NETWORK_GPRS', 'NETWORK_EDGE', 'NETWORK_Speed', 'LAUNCH_Announced', 'LAUNCH_Status', 'BODY_Dimensions', 'BODY_Weight', 'BODY_Build', 'BODY_SIM', 'DISPLAY_Type', 'DISPLAY_Size', 'DISPLAY_Resolution', 'DISPLAY_Protection', 'PLATFORM_OS', 'PLATFORM_Chipset', 'PLATFORM_CPU', 'PLATFORM_GPU', 'MEMORY_Card_slot',
                'MEMORY_Internal', 'MAIN_CAM_1_Module', 'MAIN_CAM_1_Features', 'MAIN_CAM_1_Video', 'SELFIE_CAM_2_Module', 'SELFIE_CAM_2_Features', 'SELFIE_CAM_2_Video', 'SOUND_Loudspeaker', 'SOUND_35mm_jack', 'COMMS_WLAN', 'COMMS_Bluetooth', 'COMMS_GPS', 'COMMS_NFC', 'COMMS_Radio', 'COMMS_USB', 'FEATURES_Sensors', 'BATTERY_Type', 'BATTERY_Stand_by', 'BATTERY_Talk_time', 'BATTERY_Music_play', 'MISC_Colors', 'MISC_SAR', 'MISC_SAR_EU', 'MISC_Models', 'MISC_Price']
     df = pd.DataFrame(phoneSpecs, columns=columns)
-    df.to_csv(os.path.join(
-        config['SavePath'], config['DevicesSpecsFileName'] + ".csv"), index=False)
+
+    if end == -1:
+        end = len(df)
+
+    if temp:
+        df.to_csv(os.path.join(
+            config['SavePath'], config['DevicesSpecsFileName'] + "_temp.csv"), index=False)
+        return
+
+    if start == 0 and end == -1:
+        df.to_csv(os.path.join(
+            config['SavePath'], config['DevicesSpecsFileName'] + ".csv"), index=False)
+    else:
+        df.to_csv(os.path.join(
+            config['SavePath'], config['DevicesSpecsFileName'] + "_" + str(start) + "_" + str(end) + ".csv"), index=False)
 
 
 if __name__ == "__main__":
@@ -534,4 +587,4 @@ if __name__ == "__main__":
     with open('crawler\config.yaml', 'r') as f:
         config = yaml.safe_load(f)
 
-    crawlAllPhoneSpecs(config, start=12000)
+    crawlAllPhoneSpecs(config, start=12000, end=12002)
