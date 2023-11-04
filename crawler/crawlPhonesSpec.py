@@ -534,4 +534,4 @@ if __name__ == "__main__":
     with open('crawler\config.yaml', 'r') as f:
         config = yaml.safe_load(f)
 
-    crawlAllPhoneSpecs(config, start=10500, end=12000)
+    crawlAllPhoneSpecs(config, start=12000)
