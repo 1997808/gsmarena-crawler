@@ -1,4 +1,4 @@
-from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs
+from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs, concatPhoneSpecsData
 import yaml
 
 
@@ -6,22 +6,41 @@ def main():
     with open('crawler\config.yaml', 'r') as f:
         config = yaml.safe_load(f)
 
-    print('Step 1: Crawl Brands Data')
     # get Brands name, url and Number of devices
-    crawlBrandsData(config)
+    print('Step 1: Crawl Brands Data')
+    run = input('Do you want to crawl Brands Data? (y/n): ')
+    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+        crawlBrandsData(config)
 
     print('-' * 30)
-    print('Step 2: Crawl Devices Url')
+
     # get all devices url
-    crawlDevicesUrl(config)
+    print('Step 2: Crawl Devices Url')
+    run = input('Do you want to crawl Devices Url? (y/n): ')
+    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+        crawlDevicesUrl(config)
 
     print('-' * 30)
-    print('Step 3: Crawl All Phone Specs')
+
     # get all devices specs
-    crawlAllPhoneSpecs(config)
+    print('Step 3: Crawl All Phone Specs')
+    run = input('Do you want to crawl All Phone Specs? (y/n): ')
+    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+        start = input('Start from: ')
+        end = input('End at (-1 for all): ')
+        crawlAllPhoneSpecs(config, start, end)
 
     print('-' * 30)
-    print('Done!')
+
+    # concat all data files
+    run = input('Do you want to concat all data files? (y/n): ')
+    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+        concatPhoneSpecsData(config)
+
+    print('-' * 30)
+    print('All done!')
+    print("You can find the data in", config["SavePath"], "folder")
+    print("Thank you for using our crawler! <3")
 
 
 if __name__ == '__main__':
