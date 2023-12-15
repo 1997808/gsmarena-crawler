@@ -154,6 +154,7 @@ def extract_display_protection(data: pd.DataFrame, inplace: bool=False):
 
     return data
 
+# Combine all display
 def extract_display(data: pd.DataFrame, inplace: bool=False):
     if inplace == False:
         data = data.copy()
