@@ -4,7 +4,7 @@ LAUNCH
 BODY x Lâm
 DISPLAY x Phú Note: Xoá 2 cột, thêm 2 cột tổng cộng có 4 cột, 3 num, 1 cate
 PLATFORM x Phú Note: xoá 3 cột còn 1, không có số để tách, mà chip, cpu thường cũng có ảnh hưởng đến giá, nên cần thì tách.
-MEMORY
+MEMORY x Phú Đang làm
 MAIN CAMERA
 SELFIE CAMERA
 SOUND
