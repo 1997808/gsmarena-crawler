@@ -2,7 +2,7 @@ BRAND x Lâm
 NETWORK x Lâm
 LAUNCH 
 BODY x Lâm
-DISPLAY x Phú Note: Resolution có thể tách được, xem lại
+DISPLAY x Phú Note: Xoá 2 cột, thêm 2 cột tổng cộng có 4 cột, 3 num, 1 cate
 PLATFORM x Phú _ đang làm
 MEMORY
 MAIN CAMERA
