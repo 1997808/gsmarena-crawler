@@ -153,3 +153,15 @@ def extract_display_protection(data: pd.DataFrame, inplace: bool=False):
     data.drop('DISPLAY_Protection', axis=1, inplace=True)
 
     return data
+
+def extract_display(data: pd.DataFrame, inplace: bool=False):
+    if inplace == False:
+        data = data.copy()
+    
+    extract_display_type(data, inplace=True)
+    extract_display_size(data, inplace=True)
+    extract_display_resolution(data, inplace=True)
+    extract_display_protection(data, inplace=True)
+
+    return data
+
