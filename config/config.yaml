@@ -1,19 +1,11 @@
-SavePath: "Final/data/PhoneSpecsBatch/"
-files:
-  [
-    "Devices_Specs_0_1999",
-    "Devices_Specs_2000_2999",
-    "Devices_Specs_3000_4499",
-    "Devices_Specs_4500_5999",
-  ]
+SavePath: "dataset/PhoneSpecsBatch/"
+files: "Devices_Specs"
 
 conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011 }
 
 regressors:
   [
     "LinearRegression",
-    "Ridge",
-    "Lasso",
     "ElasticNet",
     "RandomForestRegressor",
     "SGDRegressor",
@@ -23,3 +15,31 @@ regressors:
     "ExtraTreesRegressor",
     "XGBRegressor",
   ]
+
+variables:
+  [
+    "Brand",
+    "NETWORK_2G_bands",
+    "NETWORK_3G_bands",
+    "NETWORK_4G_bands",
+    "NETWORK_5G_bands",
+    "NETWORK_Speed",
+    "NETWORK_Technology",
+    "BODY_Length",
+    "BODY_Width",
+    "BODY_Thickness",
+  ]
+
+fillna_retrain_variables:
+  [
+    "NETWORK_2G_bands",
+    "NETWORK_3G_bands",
+    "NETWORK_4G_bands",
+    "NETWORK_5G_bands",
+    "NETWORK_Speed",
+    "NETWORK_Technology",
+  ]
+
+target: "MISC_Price_Euro"
+
+test_size: 0.3
