@@ -6,10 +6,8 @@ conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011 }
 regressors:
   [
     "LinearRegression",
-    "ElasticNet",
     "RandomForestRegressor",
     "SGDRegressor",
-    "DecisionTreeRegressor",
     "KNeighborsRegressor",
     "GradientBoostingRegressor",
     "ExtraTreesRegressor",
@@ -28,6 +26,7 @@ variables:
     "BODY_Length",
     "BODY_Width",
     "BODY_Thickness",
+    "BODY_Weight",
   ]
 
 fillna_retrain_variables:
