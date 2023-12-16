@@ -1,7 +1,7 @@
-MISC PRICE: -> xử lý những cột ko NA, còn lại NA thì test bằng cách fillin sử dụng imputer hoặc model 
+MISC PRICE: -> xử lý những cột ko NA, NA thì drop
 BRAND x Lâm
 - Mỗi hãng có mean giá khác nhau, không phụ thuộc vào sản phẩm hoặc features. Ngoài ra do thiếu features liên quan tới hãng, brand lại có nhiều categorical
-target enc giúp biến mean của target thành giá trị của brand, phù hợp phết.
+target enc giúp biến mean của target thành giá trị của brand, phù hợp phết -> sử dụng catBoostEncode để tránh overfit
 NETWORK x Lâm
 - `target enc`  network 2g 3g 4g 5g | có thể thử cách khác rồi so sánh
 LAUNCH (bin categorize hoặc drop) :không quá quan trọng, có thể kết hợp để sử dụng cho model `rule-based` 
