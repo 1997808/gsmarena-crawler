@@ -1,7 +1,7 @@
 SavePath: "dataset/PhoneSpecsBatch/"
 files: "Devices_Specs"
 
-conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011 }
+conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011, "INR": 0.011 }
 
 regressors:
   [
