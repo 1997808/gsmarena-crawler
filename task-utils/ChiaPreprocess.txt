@@ -4,7 +4,7 @@ BRAND x Lâm
 target enc giúp biến mean của target thành giá trị của brand, phù hợp phết.
 NETWORK x Lâm
 - `target enc`  network 2g 3g 4g 5g | có thể thử cách khác rồi so sánh
-LAUNCH (bin categorize hoặc drop)
+LAUNCH (bin categorize hoặc drop) :không quá quan trọng, có thể kết hợp để sử dụng cho model `rule-based` 
 BODY x Lâm: extract body dims -> length, width, thickness  sau đó fillin bằng mode()| còn body_weight có vẻ k ảnh hưởng lắm, nếu tính dc weight/thể tích thì may ra nên drop
 DISPLAY x Phú Note: Xoá 2 cột, thêm 2 cột tổng cộng có 4 cột, 3 num, 1 cate
 PLATFORM x Phú Note: xoá 3 cột còn 1, không có số để tách, mà chip, cpu thường cũng có ảnh hưởng đến giá, nên cần thì tách.
