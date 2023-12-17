@@ -8,8 +8,8 @@ LAUNCH (bin categorize hoặc drop) :không quá quan trọng, có thể kết h
 BODY x Lâm: extract body dims -> length, width, thickness  sau đó fillin bằng mode()| còn body_weight có vẻ k ảnh hưởng lắm, nếu tính dc weight/thể tích thì may ra nên drop
 DISPLAY x Phú Note: Xoá 2 cột, thêm 2 cột tổng cộng có 4 cột, 3 num, 1 cate
 PLATFORM x Phú Note: xoá 3 cột còn 1, không có số để tách, mà chip, cpu thường cũng có ảnh hưởng đến giá, nên cần thì tách.
-MEMORY x Phú drop 1, tạo thêm 2, tổng cộng 3 cột. card slot thì thống nhất lại 12 unique value, Internal thì tách thành rom với ram (lấy specs cao nhất)
-MAIN CAMERA x Phát
+MEMORY x Phú Đang làm
+MAIN CAMERA x Phát Note: giữ module, drop features, đặt quy luật những thằng có khả năng quay video cao hơn thì có thể quay ở res thấp hơn -> đổi lần lượt từ thằng 8k > 4k > 1440p ... thằng nào k chiếm nhiều cho thành others
 SELFIE CAMERA x Phát
 SOUND x bỏ
 COMMS x bỏ
