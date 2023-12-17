@@ -13,6 +13,6 @@ MAIN CAMERA x Phát Note: giữ module, drop features, đặt quy luật những
 SELFIE CAMERA x Phát
 SOUND x bỏ
 COMMS x bỏ
-FEATURES làm
+FEATURES X Lâm: chia từng sensors nhỏ ra rồi giá trị của features sẽ là mean của mean của toàn bộ sensors sample đó sở hữu
 BATTERY x chỉ làm cột type -> Tách ra 2 cột capacity và type 1 số 1 cate
 MISC x bỏ, giữ giá làm target
