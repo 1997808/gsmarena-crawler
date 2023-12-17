@@ -14,5 +14,5 @@ SELFIE CAMERA x Phát
 SOUND x bỏ
 COMMS x bỏ
 FEATURES làm
-BATTERY x chỉ làm cột type
+BATTERY x chỉ làm cột type -> Tách ra 2 cột capacity và type 1 số 1 cate
 MISC x bỏ, giữ giá làm target
