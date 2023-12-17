@@ -9,8 +9,8 @@ BODY x Lâm: extract body dims -> length, width, thickness  sau đó fillin bằ
 DISPLAY x Phú Note: Xoá 2 cột, thêm 2 cột tổng cộng có 4 cột, 3 num, 1 cate
 PLATFORM x Phú Note: xoá 3 cột còn 1, không có số để tách, mà chip, cpu thường cũng có ảnh hưởng đến giá, nên cần thì tách.
 MEMORY x Phú Đang làm
-MAIN CAMERA x Phát Note: module giữ nguyên, feature không dùng vì null nhiều, video tách từ thấp đến cao 8K > 4K > 1440p >... còn lại cho vào others
-SELFIE CAMERA x Phát Note: null nhiều k chơi
+MAIN CAMERA x Phát
+SELFIE CAMERA x Phát
 SOUND x bỏ
 COMMS x bỏ
 FEATURES làm
