@@ -3,32 +3,64 @@ files: "Devices_Specs"
 
 conversion_rates: { "$": 0.94, "£": 1.15, "₹": 0.011, "INR": 0.011 }
 
-regressors:
-  [
+regressors: [
     "LinearRegression",
     "RandomForestRegressor",
     "SGDRegressor",
     "KNeighborsRegressor",
     "GradientBoostingRegressor",
     "ExtraTreesRegressor",
-    "XGBRegressor",
+    "AdaBoostRegressor",
+    "SVR",
+    "DecisionTreeRegressor",
+    # "XGBRegressor",
   ]
 
 variables:
   [
     "Brand",
+    "NETWORK_Technology",
     "NETWORK_2G_bands",
     "NETWORK_3G_bands",
     "NETWORK_4G_bands",
     "NETWORK_5G_bands",
     "NETWORK_Speed",
-    "NETWORK_Technology",
+    "LAUNCH_Announced",
+    "BODY_Weight",
     "BODY_Length",
     "BODY_Width",
     "BODY_Thickness",
-    "BODY_Weight",
+    "FEATURES_Sensors",
+    "DISPLAY_Type",
+    "DISPLAY_Size",
+    "PLATFORM_OS",
+    "MEMORY_Card_slot",
+    "MEMORY_Internal_rom",
+    "MEMORY_Internal_ram",
+    "BATTERY_Type",
+    "BATTERY_Capacity",
+    "MAIN_CAM_1_Module",
+    "MAIN_CAM_1_Video",
+    "DISPLAY_Resolution_Width",
+    "DISPLAY_Resolution_Height",
+  ]
+cat_enc_cols:
+  [
+    "Brand",
+    "NETWORK_Technology",
+    "NETWORK_2G_bands",
+    "NETWORK_3G_bands",
+    "NETWORK_4G_bands",
+    "NETWORK_5G_bands",
+    "BATTERY_Type",
+    "MAIN_CAM_1_Module",
+    "MAIN_CAM_1_Video",
+    "DISPLAY_Type",
+    "PLATFORM_OS",
+    "MEMORY_Card_slot",
   ]
 
+label_enc_cols: []
 fillna_retrain_variables:
   [
     "NETWORK_2G_bands",
