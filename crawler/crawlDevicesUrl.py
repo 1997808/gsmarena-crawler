@@ -83,11 +83,8 @@ def findPhonesRow(driver):
 
 def getPhonesLink(brand_link_rows, phones_link_list):
     for brand_link_row in brand_link_rows:
-        # filter get iphone
-        deviceUrl = brand_link_row.find_element(
-            By.TAG_NAME, 'a').get_attribute('href')
-        if deviceUrl.find('iphone') != -1:
-            phones_link_list.append(deviceUrl)
+        phones_link_list.append(brand_link_row.find_element(
+            By.TAG_NAME, 'a').get_attribute('href'))
     return phones_link_list
 
 

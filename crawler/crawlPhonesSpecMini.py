@@ -84,24 +84,6 @@ def parseDeviceData(soup) -> list:
     except:
         DISPLAY_Resolution = None
 
-    # get Chipset
-    try:
-        PLATFORM_Chipset = soup.find('td', attrs={'data-spec': 'chipset'}).text
-    except:
-        PLATFORM_Chipset = None
-
-    # get CPU
-    try:
-        PLATFORM_CPU = soup.find('td', attrs={'data-spec': 'cpu'}).text
-    except:
-        PLATFORM_CPU = None
-
-    # get GPU
-    try:
-        PLATFORM_GPU = soup.find('td', attrs={'data-spec': 'gpu'}).text
-    except:
-        PLATFORM_GPU = None
-
     # get Models
     try:
         MISC_Models = soup.find('td', attrs={'data-spec': 'models'}).text
@@ -112,9 +94,6 @@ def parseDeviceData(soup) -> list:
             NETWORK_5G_bands,
             LAUNCH_Announced,
             DISPLAY_Resolution,
-            PLATFORM_Chipset,
-            PLATFORM_CPU,
-            PLATFORM_GPU,
             MISC_Models]
 
 
@@ -191,8 +170,8 @@ def convertTime(enlapsedTime):
 
 
 def savePhoneSpecs(config, phoneSpecs, start=0, end=-1, temp=False):
-    columns = ['Brand', 'url', 'Name', 'NETWORK_5G_bands', 'LAUNCH_Announced', 'DISPLAY_Resolution', 'PLATFORM_Chipset', 'PLATFORM_CPU', 'PLATFORM_GPU',
-               'MISC_Models']
+    columns = ['Brand', 'url', 'Name', 'NETWORK_5G_bands',
+               'LAUNCH_Announced', 'DISPLAY_Resolution', 'MISC_Models']
     df = pd.DataFrame(phoneSpecs, columns=columns)
 
     if end == -1:
