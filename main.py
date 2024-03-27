@@ -1,4 +1,4 @@
-from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs, concatPhoneSpecsData
+from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs, concatPhoneSpecsData, crawlAllPhoneSpecsMini
 import yaml
 
 
@@ -28,7 +28,8 @@ def main():
     if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
         start = input('Start from: ')
         end = input('End at (-1 for all): ')
-        crawlAllPhoneSpecs(config, start, end)
+        crawlAllPhoneSpecsMini(config, start, end)
+        # crawlAllPhoneSpecs(config, start, end)
 
     print('-' * 30)
 

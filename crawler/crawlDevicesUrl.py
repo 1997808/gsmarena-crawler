@@ -83,8 +83,11 @@ def findPhonesRow(driver):
 
 def getPhonesLink(brand_link_rows, phones_link_list):
     for brand_link_row in brand_link_rows:
-        phones_link_list.append(brand_link_row.find_element(
-            By.TAG_NAME, 'a').get_attribute('href'))
+        # filter get iphone
+        deviceUrl = brand_link_row.find_element(
+            By.TAG_NAME, 'a').get_attribute('href')
+        if deviceUrl.find('iphone') != -1:
+            phones_link_list.append(deviceUrl)
     return phones_link_list
 
 
@@ -94,7 +97,8 @@ def goNextPage(driver, config):
 
     # find the next page button
     try:
-        next_page = driver.find_element(By.CLASS_NAME, 'pages-next')
+        # next_page = driver.find_element(By.CLASS_NAME, 'prevnextbutton')
+        next_page = driver.find_element(By.XPATH, "//a[@title='Next page']")
     except TimeoutException as e:
         print("Wait Timed out")
         # print(e)

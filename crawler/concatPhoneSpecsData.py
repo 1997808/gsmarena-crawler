@@ -15,9 +15,10 @@ def concatPhoneSpecsData(config):
     # concat all data files
     df = pd.concat([pd.read_csv(os.path.join(path, file))
                     for file in files], ignore_index=True)
-    
+
     # save to csv
-    df.to_csv(os.path.join(path, config["DevicesSpecsFileName"] + ".csv"), index=False)
+    df.to_csv(os.path.join(
+        path, config["DevicesSpecsFileName"] + ".csv"), index=False)
 
 
 if __name__ == '__main__':
