@@ -3,9 +3,9 @@ SavePath: data
 BrandsListFileName: Brands_data
 AllDevicesUrlsFileName: Devices_url
 DevicesSpecsFileName: Devices_Specs
-DRIVER_WAIT_TIME: 10
-TIME_LOAD_PAGE: 2
-TIME_CLICK: 2
+DRIVER_WAIT_TIME: 5
+TIME_LOAD_PAGE: 0.5
+TIME_CLICK: 0.5
 MAX_PAGE: 30
 REQUESTS_WAIT_TIME: 2
-SAVE_EVERY: 100
+SAVE_EVERY: 50

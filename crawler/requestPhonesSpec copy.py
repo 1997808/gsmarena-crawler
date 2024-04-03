@@ -10,90 +10,46 @@ import time
 # from crawlBranch import convertTime
 
 
-from selenium import webdriver
-from selenium.webdriver.edge.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-# from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
-
-
 # # get html from url
 # def getPageContent(url):
 #     r = requests.get(url)
 #     return BeautifulSoup(r.text, 'html.parser')
 
+def getPageContent(url):
+    # Create a new requests session.
+    session = requests.Session()
 
-# def getPageContent(url):
-#     # Create a new requests session.
-#     session = requests.Session()
+    # Set a random user agent.
+    session.headers["User-Agent"] = random.choice([
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.80 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/98.0 Safari/537.36",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/604.1.15 (KHTML, like Gecko) Version/15.5 Mobile/15E148 Safari/604.1",
+    ])
 
-#     # Set a random user agent.
-#     session.headers["User-Agent"] = random.choice([
-#         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36",
-#         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/99.0 Safari/537.36",
-#         "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Mobile/15E148 Safari/604.1",
-#     ])
+    # Add a random delay between requests.
+    time.sleep(random.uniform(0, 1))
 
-#     # Add a random delay between requests.
-#     time.sleep(random.uniform(1, 5))
+    # Make the request.
+    response = session.get(url)
 
-#     # Make the request.
-#     response = session.get(url)
+    # Check for a 429 error (Too Many Requests).
+    if response.status_code == 429:
+        # Wait for the number of seconds specified in the "Retry-After" header.
+        retry_after = int(response.headers["Retry-After"])
+        time.sleep(retry_after)
+        print('Handle retry for url ' + url + ' ' + retry_after)
 
-#     # Check for a 429 error (Too Many Requests).
-#     if response.status_code == 429:
-#         # Wait for the number of seconds specified in the "Retry-After" header.
-#         retry_after = int(response.headers["Retry-After"])
-#         time.sleep(retry_after)
+        # Retry the request.
+        response = session.get(url)
 
-#         # Retry the request.
-#         response = session.get(url)
-
-#     # If everything is successful, return the content of the page.
-#     if response.status_code == 200:
-#         # return response.content
-#         return BeautifulSoup(response.text, 'html.parser')
-#     else:
-#         # Raise an exception if the request failed.
-#         raise Exception(
-#             "Failed to get page content: {}".format(response.status_code))
-
-# Selenium functions
-def createDriver():
-    # create the driver
-    options = Options()
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-notifications")
-    options.add_argument("--disable-infobars")
-    options.add_argument("--mute-audio")
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument("--no-sandbox")
-    options.add_argument('--disable-gpu')
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-    return webdriver.Edge(options=options)
-
-
-def openURL(driver, url, idRecog, config) -> bool:
-    wait = WebDriverWait(driver, config["DRIVER_WAIT_TIME"])
-    try:
-        driver.get(url)
-    except:
-        print("Cannot open url:", url)
-        time.sleep(config['TIME_LOAD_PAGE'])
-        return False
-
-    try:
-        wait.until(EC.presence_of_element_located(
-            (By.ID, idRecog)))
-    except:
-        print("Cannot load page:", url)
-        time.sleep(config['TIME_LOAD_PAGE'])
-        return False
-
-    time.sleep(config['TIME_LOAD_PAGE'])
-    return True
+    # If everything is successful, return the content of the page.
+    if response.status_code == 200:
+        # return response.content
+        return BeautifulSoup(response.text, 'html.parser')
+    else:
+        # Raise an exception if the request failed.
+        raise Exception(
+            "Failed to get page content: {}".format(response.status_code))
 
 
 # parse data from html to get phone specs
@@ -499,7 +455,7 @@ def parseDeviceData(soup) -> list:
 
 # Main function
 # get all phone specs
-def crawlAllPhoneSpecs(config, start=0, end=-1):
+def requestPhonesSpec(config, start=0, end=-1):
     # load all device url
     DeviceUrls = pd.read_csv(os.path.join(
         config['SavePath'], config['AllDevicesUrlsFileName'] + ".csv"))
@@ -507,9 +463,6 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     phoneSpecs = []
     print("Start crawling phone specs")
     startTime = time.time()
-
-    # create webdriver
-    driver = createDriver()
 
     # convert start and end to int
     try:
@@ -526,17 +479,14 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     for i in range(start, end):
         url = DeviceUrls['DeviceUrl'][i]
         print("\rCrawling device " + str(i+1) + ' ', end="")
-
         # try to open url
-        if not openURL(driver, url, "specs-list", config):
+        try:
+            soup = getPageContent(url)
+            # parse data
+            phoneSpecs.append([DeviceUrls['BrandName'][i],
+                               url] + parseDeviceData(soup))
+        except:
             continue
-
-        # get page source
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-        # parse data
-        phoneSpecs.append([DeviceUrls['BrandName'][i],
-                          url] + parseDeviceData(soup))
 
         # save data every 500 devices
         if (i+1) % config['SAVE_EVERY'] == 0:
@@ -549,9 +499,6 @@ def crawlAllPhoneSpecs(config, start=0, end=-1):
     print("Total devices crawled:", len(phoneSpecs))
     print("Total time:", convertTime(time.time() - startTime))
     savePhoneSpecs(config, phoneSpecs, start, end)
-
-    # close webdriver
-    driver.close()
 
 
 # Util function
@@ -595,4 +542,4 @@ if __name__ == "__main__":
     with open('crawler\config.yaml', 'r') as f:
         config = yaml.safe_load(f)
 
-    crawlAllPhoneSpecs(config, start=12000, end=12002)
+    requestPhonesSpec(config, start=12000, end=12002)

@@ -1,4 +1,4 @@
-from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs, concatPhoneSpecsData, crawlAllPhoneSpecsMini
+from crawler import crawlBrandsData, crawlDevicesUrl, crawlAllPhoneSpecs, concatPhoneSpecsData, requestPhonesSpec
 import yaml
 
 
@@ -7,28 +7,29 @@ def main():
         config = yaml.safe_load(f)
 
     # get Brands name, url and Number of devices
-    print('Step 1: Crawl Brands Data')
-    run = input('Do you want to crawl Brands Data? (y/n): ')
-    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
-        crawlBrandsData(config)
+    # print('Step 1: Crawl Brands Data')
+    # run = input('Do you want to crawl Brands Data? (y/n): ')
+    # if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+    #     crawlBrandsData(config)
 
-    print('-' * 30)
+    # print('-' * 30)
 
     # get all devices url
-    print('Step 2: Crawl Devices Url')
-    run = input('Do you want to crawl Devices Url? (y/n): ')
-    if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
-        crawlDevicesUrl(config)
+    # print('Step 2: Crawl Devices Url')
+    # run = input('Do you want to crawl Devices Url? (y/n): ')
+    # if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
+    # crawlDevicesUrl(config)
 
-    print('-' * 30)
+    # print('-' * 30)
 
     # get all devices specs
     print('Step 3: Crawl All Phone Specs')
     run = input('Do you want to crawl All Phone Specs? (y/n): ')
     if run == 'y' or run == 'Y' or run == 'yes' or run == 'Yes' or run == 'YES':
-        start = input('Start from: ')
+        # start = input('Start from: ')
+        start = 0
         end = input('End at (-1 for all): ')
-        crawlAllPhoneSpecsMini(config, start, end)
+        requestPhonesSpec(config, start, end)
         # crawlAllPhoneSpecs(config, start, end)
 
     print('-' * 30)

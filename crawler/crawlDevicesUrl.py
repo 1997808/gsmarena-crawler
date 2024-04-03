@@ -1,3 +1,4 @@
+import random
 import yaml
 import pandas as pd
 import os
@@ -139,8 +140,9 @@ def crawlAllDeviceUrlOfABrand(driver, config, brand_url):
         # get the phones link list
         phones_link_list = getPhonesLink(brand_link_rows, phones_link_list)
 
-        if page == config['MAX_PAGE']:
-            break
+        # limit break to go further and beyond
+        # if page == config['MAX_PAGE']:
+        #     break
 
     print("Total page:", page)
     return phones_link_list
@@ -173,6 +175,8 @@ def crawlAllDeviceUrlOfAllBrand(config, Brands_data):
         res.extend([[BrandsName[i], phone_link]
                    for phone_link in phones_link_list])
 
+        # save data every brand
+        saveAllDeviceUrlOfAllBrand(config, res)
         # Test
         # break
 
